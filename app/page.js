@@ -45,7 +45,7 @@ const ACTION_CARDS = [
   },
   {
     id: "ambush", name: "AMBUSH", symbol: "🗡",
-    color: "#e5e6e5", glow: "#88FF88",
+    color: "#e5e6e5", glow: "#ffffff",
     bg: "linear-gradient(135deg, #585858 0%, #6f726f 50%, #6b6969 100%)",
     border: "#ffffff", desc: "Strike before anyone can react", tagline: "Strike from the shadows.",
   },
