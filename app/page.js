@@ -2,103 +2,174 @@
 import { useState, useEffect, useRef } from "react";
 
 const PLAYER_COLORS = [
-  { name: "Crimson",  bg: "#7C0A02", text: "#FFD6D6", accent: "#FF4444" },
-  { name: "Cobalt",   bg: "#0A1F7C", text: "#D6DFFF", accent: "#4488FF" },
-  { name: "Emerald",  bg: "#0A5C2A", text: "#D6FFE4", accent: "#44FF88" },
-  { name: "Amber",    bg: "#7C4A00", text: "#FFF0D6", accent: "#FFA833" },
-  { name: "Violet",   bg: "#3D0A7C", text: "#EDD6FF", accent: "#AA44FF" },
-  { name: "Teal",     bg: "#0A5C5C", text: "#D6FFFF", accent: "#33FFEE" },
-  { name: "Rose",     bg: "#7C0A4A", text: "#FFD6EE", accent: "#FF44AA" },
-  { name: "Slate",    bg: "#1A2A3A", text: "#D6E8FF", accent: "#88BBDD" },
-  { name: "Olive",    bg: "#4A5C0A", text: "#F0FFD6", accent: "#AADD33" },
-  { name: "Maroon",   bg: "#5C1A0A", text: "#FFE0D6", accent: "#FF6644" },
-  { name: "Indigo",   bg: "#0A0A6A", text: "#D6D6FF", accent: "#6666FF" },
-  { name: "Jade",     bg: "#0A4A3A", text: "#D6FFF5", accent: "#33FFCC" },
-  { name: "Bronze",   bg: "#5C3A0A", text: "#FFF0D6", accent: "#DD9944" },
-  { name: "Plum",     bg: "#5C0A5C", text: "#FFD6FF", accent: "#FF44FF" },
-  { name: "Steel",    bg: "#2A3A4A", text: "#D6EEFF", accent: "#66AACC" },
-  { name: "Sienna",   bg: "#6A2A0A", text: "#FFE8D6", accent: "#FF8855" },
-  { name: "Navy",     bg: "#0A0A4A", text: "#D6D6FF", accent: "#4455FF" },
-  { name: "Forest",   bg: "#1A4A1A", text: "#D6FFD6", accent: "#55CC55" },
-  { name: "Copper",   bg: "#7C3A1A", text: "#FFEEDD", accent: "#EE8844" },
+  { name: "Crimson", bg: "#7C0A02", text: "#FFD6D6", accent: "#FF4444" },
+  { name: "Cobalt", bg: "#0A1F7C", text: "#D6DFFF", accent: "#4488FF" },
+  { name: "Emerald", bg: "#0A5C2A", text: "#D6FFE4", accent: "#44FF88" },
+  { name: "Amber", bg: "#7C4A00", text: "#FFF0D6", accent: "#FFA833" },
+  { name: "Violet", bg: "#3D0A7C", text: "#EDD6FF", accent: "#AA44FF" },
+  { name: "Teal", bg: "#0A5C5C", text: "#D6FFFF", accent: "#33FFEE" },
+  { name: "Rose", bg: "#7C0A4A", text: "#FFD6EE", accent: "#FF44AA" },
+  { name: "Slate", bg: "#1A2A3A", text: "#D6E8FF", accent: "#88BBDD" },
+  { name: "Olive", bg: "#4A5C0A", text: "#F0FFD6", accent: "#AADD33" },
+  { name: "Maroon", bg: "#5C1A0A", text: "#FFE0D6", accent: "#FF6644" },
+  { name: "Indigo", bg: "#0A0A6A", text: "#D6D6FF", accent: "#6666FF" },
+  { name: "Jade", bg: "#0A4A3A", text: "#D6FFF5", accent: "#33FFCC" },
+  { name: "Bronze", bg: "#5C3A0A", text: "#FFF0D6", accent: "#DD9944" },
+  { name: "Plum", bg: "#5C0A5C", text: "#FFD6FF", accent: "#FF44FF" },
+  { name: "Steel", bg: "#2A3A4A", text: "#D6EEFF", accent: "#66AACC" },
+  { name: "Sienna", bg: "#6A2A0A", text: "#FFE8D6", accent: "#FF8855" },
+  { name: "Navy", bg: "#0A0A4A", text: "#D6D6FF", accent: "#4455FF" },
+  { name: "Forest", bg: "#1A4A1A", text: "#D6FFD6", accent: "#55CC55" },
+  { name: "Copper", bg: "#7C3A1A", text: "#FFEEDD", accent: "#EE8844" },
   { name: "Midnight", bg: "#0A0A1A", text: "#D6D6EE", accent: "#8888CC" },
 ];
 
 const ACTION_CARDS = [
   {
-    id: "steal", name: "STEAL", symbol: "⚔",
-    color: "#CC0000", glow: "#FF3333",
+    id: "steal",
+    name: "STEAL",
+    symbol: "⚔",
+    color: "#CC0000",
+    glow: "#FF3333",
     bg: "linear-gradient(135deg, #3A0000 0%, #7C0000 50%, #3A0000 100%)",
-    border: "#CC0000", desc: "Take all tokens from one player", tagline: "What's yours is mine.",
+    border: "#CC0000",
+    desc: "Take all tokens from one player",
+    tagline: "What's yours is mine.",
   },
   {
-    id: "share", name: "SHARE", symbol: "✦",
-    color: "#00AACC", glow: "#33DDFF",
+    id: "share",
+    name: "SHARE",
+    symbol: "✦",
+    color: "#00AACC",
+    glow: "#33DDFF",
     bg: "linear-gradient(135deg, #002233 0%, #005577 50%, #002233 100%)",
-    border: "#0099CC", desc: "Split tokens evenly with an ally", tagline: "Together we rise.",
+    border: "#0099CC",
+    desc: "Split tokens evenly with an ally",
+    tagline: "Together we rise.",
   },
   {
-    id: "grab", name: "GRAB & GO", symbol: "◆",
-    color: "#BB8800", glow: "#FFD700",
+    id: "grab",
+    name: "GRAB & GO",
+    symbol: "◆",
+    color: "#BB8800",
+    glow: "#FFD700",
     bg: "linear-gradient(135deg, #2A1A00 0%, #6A4400 50%, #2A1A00 100%)",
-    border: "#CC9900", desc: "Take exactly one token and flee", tagline: "Greed is speed.",
+    border: "#CC9900",
+    desc: "Take exactly one token and flee",
+    tagline: "Greed is speed.",
   },
   {
-    id: "ambush", name: "AMBUSH", symbol: "🗡",
-    color: "#e5e6e5", glow: "#ffffff",
+    id: "ambush",
+    name: "AMBUSH",
+    symbol: "🗡",
+    color: "#e5e6e5",
+    glow: "#ffffff",
     bg: "linear-gradient(135deg, #585858 0%, #6f726f 50%, #6b6969 100%)",
-    border: "#ffffff", desc: "Strike before anyone can react", tagline: "Strike from the shadows.",
+    border: "#ffffff",
+    desc: "Strike before anyone can react",
+    tagline: "Strike from the shadows.",
   },
 ];
 
 function GoldCoin({ size = 44 }) {
   return (
-    <span style={{
-      display: "inline-flex", alignItems: "center", justifyContent: "center",
-      width: size, height: size, borderRadius: "50%", flexShrink: 0,
-      background: "radial-gradient(circle at 35% 30%, #FFF176, #FFD700 40%, #B8860B 80%, #7A5800)",
-      boxShadow: `0 2px 6px rgba(0,0,0,0.6), inset 0 1px 3px rgba(255,255,200,0.5), 0 0 ${size/2}px rgba(255,215,0,0.4)`,
-      border: "2px solid #B8860B", fontSize: size * 0.4,
-    }}>⬡</span>
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: size,
+        height: size,
+        borderRadius: "50%",
+        flexShrink: 0,
+        background:
+          "radial-gradient(circle at 35% 30%, #FFF176, #FFD700 40%, #B8860B 80%, #7A5800)",
+        boxShadow: `0 2px 6px rgba(0,0,0,0.6), inset 0 1px 3px rgba(255,255,200,0.5), 0 0 ${size / 2}px rgba(255,215,0,0.4)`,
+        border: "2px solid #B8860B",
+        fontSize: size * 0.4,
+      }}
+    >
+      ⬡
+    </span>
   );
 }
 
 export default function DeadLastGame() {
-  const [nameInput, setNameInput]     = useState("");
-  const [players, setPlayers]         = useState([]);
-  const [started, setStarted]         = useState(false);
-  const [zoomedCard, setZoomedCard]   = useState(null);
-  const [shake, setShake]             = useState(false);
+  const [nameInput, setNameInput] = useState("");
+  const [players, setPlayers] = useState([]);
+  const [started, setStarted] = useState(false);
+  const [zoomedCard, setZoomedCard] = useState(null);
+  const [shake, setShake] = useState(false);
 
   // Gold coin state
-  const [goldCount, setGoldCount]     = useState("");   // number of rolls input
-  const [goldTotal, setGoldTotal]     = useState(0);    // cumulative coins
-  const [goldLast, setGoldLast]       = useState(null); // coins from most recent roll
+  const [goldCount, setGoldCount] = useState(""); // number of rolls input
+  const [goldTotal, setGoldTotal] = useState(0); // cumulative coins
+  const [goldLast, setGoldLast] = useState(null); // coins from most recent roll
   const [goldSpinning, setGoldSpinning] = useState(false);
-  const [goldShake, setGoldShake]     = useState(false);
-  const [goldRolled, setGoldRolled]   = useState(false);
+  const [goldShake, setGoldShake] = useState(false);
+  const [goldRolled, setGoldRolled] = useState(false);
 
   const nameRef = useRef(null);
 
-  const addPlayer = () => {
-    const name = nameInput.trim();
-    if (!name) return;
-    if (players.length >= 20) { triggerShake(); return; }
-    if (players.find(p => p.name.toLowerCase() === name.toLowerCase())) { triggerShake(); return; }
-    setPlayers(prev => [...prev, { name, color: PLAYER_COLORS[prev.length] }]);
+  // const addPlayer = () => {
+  //   const name = nameInput.trim();
+  //   if (!name) return;
+  //   if (players.length >= 20) { triggerShake(); return; }
+  //   if (players.find(p => p.name.toLowerCase() === name.toLowerCase())) { triggerShake(); return; }
+  //   setPlayers(prev => [...prev, { name, color: PLAYER_COLORS[prev.length] }]);
+  //   setNameInput("");
+  //   nameRef.current?.focus();
+  // };
+
+  const addPlayers = () => {
+    const lines = nameInput
+      .split("\n")
+      .map((l) => l.trim())
+      .filter(Boolean);
+    if (!lines.length) return;
+
+    setPlayers((prev) => {
+      let current = [...prev];
+      let shook = false;
+      for (const name of lines) {
+        if (current.length >= 20) {
+          shook = true;
+          break;
+        }
+        if (current.find((p) => p.name.toLowerCase() === name.toLowerCase())) {
+          shook = true;
+          continue;
+        }
+        current.push({ name, color: PLAYER_COLORS[current.length] });
+      }
+      if (shook) {
+        setShake(true);
+        setTimeout(() => setShake(false), 500);
+      }
+      return current;
+    });
     setNameInput("");
     nameRef.current?.focus();
   };
 
-  const triggerShake = () => { setShake(true); setTimeout(() => setShake(false), 500); };
+  const triggerShake = () => {
+    setShake(true);
+    setTimeout(() => setShake(false), 500);
+  };
+  // const removePlayer = (i) =>
+  //   setPlayers((prev) => prev.filter((_, idx) => idx !== i));
+  // const handleKey = (e) => {
+  //   if (e.key === "Enter") addPlayer();
+  // };
   const removePlayer = (i) => setPlayers(prev => prev.filter((_, idx) => idx !== i));
-  const handleKey = (e) => { if (e.key === "Enter") addPlayer(); };
 
-  const openZoom  = (type, data) => setZoomedCard({ type, data });
+  const openZoom = (type, data) => setZoomedCard({ type, data });
   const closeZoom = () => setZoomedCard(null);
 
   useEffect(() => {
-    const h = (e) => { if (e.key === "Escape") closeZoom(); };
+    const h = (e) => {
+      if (e.key === "Escape") closeZoom();
+    };
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
   }, []);
@@ -116,18 +187,23 @@ export default function DeadLastGame() {
       let gained = 0;
       for (let i = 0; i < n; i++) gained += Math.floor(Math.random() * 4);
       setGoldLast(gained);
-      setGoldTotal(prev => prev + gained);
+      setGoldTotal((prev) => prev + gained);
       setGoldRolled(true);
       setGoldSpinning(false);
       setGoldCount("");
     }, 900);
   };
 
-  const handleGoldKey = (e) => { if (e.key === "Enter") handleGoldRoll(); };
+  const handleGoldKey = (e) => {
+    if (e.key === "Enter") handleGoldRoll();
+  };
 
   const resetGold = () => {
-    setGoldCount(""); setGoldTotal(0);
-    setGoldLast(null); setGoldRolled(false); setGoldSpinning(false);
+    setGoldCount("");
+    setGoldTotal(0);
+    setGoldLast(null);
+    setGoldRolled(false);
+    setGoldSpinning(false);
   };
 
   const CSS = `
@@ -436,7 +512,6 @@ export default function DeadLastGame() {
     <>
       <style>{CSS}</style>
       <div className="root">
-
         {/* HEADER */}
         <header className="header">
           <div className="title">DEAD LAST</div>
@@ -448,18 +523,17 @@ export default function DeadLastGame() {
           <div className="setup">
             <div className="count-label">{players.length} / 20 PLAYERS</div>
             <div className="input-row">
-              <input
+              <textarea
                 ref={nameRef}
-                className={`name-input${shake ? " shake" : ""}`}
-                placeholder="Enter player name…"
+                className={`name-input name-textarea${shake ? " shake" : ""}`}
+                placeholder={"Enter names"}
                 value={nameInput}
                 onChange={e => setNameInput(e.target.value)}
-                onKeyDown={handleKey}
-                maxLength={24}
                 autoComplete="off"
                 autoCapitalize="words"
+                rows={4}
               />
-              <button className="btn btn-add" onClick={addPlayer}>＋ ADD</button>
+              <button className="btn btn-add" onClick={addPlayers}>＋ ADD</button>
             </div>
             <div className="player-list">
               {players.map((p, i) => (
@@ -480,20 +554,37 @@ export default function DeadLastGame() {
         {/* BOARD */}
         {started && (
           <div className="board">
-
             {/* Player cards */}
             <div className="section-title">⚔ Players ⚔</div>
             <div className="cards-grid">
               {players.map((p, i) => (
-                <div key={i} className="player-card" onClick={() => openZoom("player", p)}
+                <div
+                  key={i}
+                  className="player-card"
+                  onClick={() => openZoom("player", p)}
                   style={{
                     background: `radial-gradient(ellipse at 35% 30%, ${p.color.accent}22, ${p.color.bg} 70%)`,
-                    borderColor: p.color.accent + "66", color: p.color.text,
+                    borderColor: p.color.accent + "66",
+                    color: p.color.text,
                     boxShadow: `0 3px 16px ${p.color.accent}1A, inset 0 1px 0 ${p.color.accent}2A`,
-                  }}>
-                  <div className="card-watermark" style={{ color: p.color.accent }}>{p.name[0].toUpperCase()}</div>
-                  <div className="card-corner tl">{String(i+1).padStart(2,"0")}<br/>{p.color.name.toUpperCase()}</div>
-                  <div className="card-corner br">{String(i+1).padStart(2,"0")}<br/>{p.color.name.toUpperCase()}</div>
+                  }}
+                >
+                  <div
+                    className="card-watermark"
+                    style={{ color: p.color.accent }}
+                  >
+                    {p.name[0].toUpperCase()}
+                  </div>
+                  <div className="card-corner tl">
+                    {String(i + 1).padStart(2, "0")}
+                    <br />
+                    {p.color.name.toUpperCase()}
+                  </div>
+                  <div className="card-corner br">
+                    {String(i + 1).padStart(2, "0")}
+                    <br />
+                    {p.color.name.toUpperCase()}
+                  </div>
                   <div className="card-name">{p.name}</div>
                   <div className="card-color-label">{p.color.name}</div>
                 </div>
@@ -501,27 +592,44 @@ export default function DeadLastGame() {
             </div>
 
             <div className="divider">
-              <div className="divider-line"/><div className="divider-icon">✦</div><div className="divider-line"/>
+              <div className="divider-line" />
+              <div className="divider-icon">✦</div>
+              <div className="divider-line" />
             </div>
 
             {/* Action cards */}
             <div className="section-title">⚜ Action Cards ⚜</div>
             <div className="action-cards-row">
-              {ACTION_CARDS.map(ac => (
-                <div key={ac.id} className="action-card" onClick={() => openZoom("action", ac)}
+              {ACTION_CARDS.map((ac) => (
+                <div
+                  key={ac.id}
+                  className="action-card"
+                  onClick={() => openZoom("action", ac)}
                   style={{
-                    background: ac.bg, borderColor: ac.border + "99", color: ac.color,
+                    background: ac.bg,
+                    borderColor: ac.border + "99",
+                    color: ac.color,
                     boxShadow: `0 3px 20px ${ac.glow}22, inset 0 1px 0 ${ac.glow}18`,
-                  }}>
-                  <div className="action-card-shine"/>
-                  <div className="action-card-symbol" style={{ color: ac.color }}>{ac.symbol}</div>
-                  <div className="action-card-name"   style={{ color: ac.color }}>{ac.name}</div>
+                  }}
+                >
+                  <div className="action-card-shine" />
+                  <div
+                    className="action-card-symbol"
+                    style={{ color: ac.color }}
+                  >
+                    {ac.symbol}
+                  </div>
+                  <div className="action-card-name" style={{ color: ac.color }}>
+                    {ac.name}
+                  </div>
                 </div>
               ))}
             </div>
 
             <div className="divider">
-              <div className="divider-line"/><div className="divider-icon">⬡</div><div className="divider-line"/>
+              <div className="divider-line" />
+              <div className="divider-icon">⬡</div>
+              <div className="divider-line" />
             </div>
 
             {/* GOLD COIN DRAW */}
@@ -530,23 +638,29 @@ export default function DeadLastGame() {
               <div className="gold-box">
                 <div className="gold-title">Gold Coin Draw</div>
                 <div className="gold-sub">
-                  Enter how many times to roll, then tap Roll — each roll gives 0–3 coins, and they stack up!
+                  Enter how many times to roll, then tap Roll — each roll gives
+                  0–3 coins, and they stack up!
                 </div>
 
                 {/* Running total */}
                 <div className="gold-total-row">
                   <div className="gold-total-coins">
-                    {goldTotal === 0
-                      ? <span className="reveal-zero">No coins yet</span>
-                      : <>
-                          {Array.from({ length: Math.min(goldTotal, 12) }).map((_, i) => (
+                    {goldTotal === 0 ? (
+                      <span className="reveal-zero">No coins yet</span>
+                    ) : (
+                      <>
+                        {Array.from({ length: Math.min(goldTotal, 12) }).map(
+                          (_, i) => (
                             <GoldCoin key={i} size={36} />
-                          ))}
-                          {goldTotal > 12 && (
-                            <span className="gold-overflow">+{goldTotal - 12}</span>
-                          )}
-                        </>
-                    }
+                          ),
+                        )}
+                        {goldTotal > 12 && (
+                          <span className="gold-overflow">
+                            +{goldTotal - 12}
+                          </span>
+                        )}
+                      </>
+                    )}
                   </div>
                   {goldRolled && (
                     <div className="gold-total-label">
@@ -554,7 +668,9 @@ export default function DeadLastGame() {
                       <span className="gold-total-text">total coins</span>
                       {goldLast !== null && (
                         <span className="gold-last-gained" key={goldTotal}>
-                          {goldLast > 0 ? `+${goldLast} this roll` : "±0 this roll"}
+                          {goldLast > 0
+                            ? `+${goldLast} this roll`
+                            : "±0 this roll"}
                         </span>
                       )}
                     </div>
@@ -569,24 +685,41 @@ export default function DeadLastGame() {
                     inputMode="numeric"
                     placeholder="# of rolls…"
                     value={goldCount}
-                    onChange={e => setGoldCount(e.target.value)}
+                    onChange={(e) => setGoldCount(e.target.value)}
                     onKeyDown={handleGoldKey}
-                    min="1" max="99"
+                    min="1"
+                    max="99"
                   />
-                  <button className="btn-gold" onClick={handleGoldRoll} disabled={goldSpinning}>
-                    {goldSpinning ? <span className="coin-spin">⬡</span> : "Roll ✦"}
+                  <button
+                    className="btn-gold"
+                    onClick={handleGoldRoll}
+                    disabled={goldSpinning}
+                  >
+                    {goldSpinning ? (
+                      <span className="coin-spin">⬡</span>
+                    ) : (
+                      "Roll ✦"
+                    )}
                   </button>
                 </div>
 
                 {goldRolled && (
-                  <button className="btn-reset" onClick={resetGold}>↺ Reset Coins</button>
+                  <button className="btn-reset" onClick={resetGold}>
+                    ↺ Reset Coins
+                  </button>
                 )}
               </div>
             </div>
 
             <div style={{ textAlign: "center", marginTop: 36 }}>
-              <button className="btn btn-start" style={{ width: "auto", padding: "12px 32px" }}
-                onClick={() => { setStarted(false); resetGold(); }}>
+              <button
+                className="btn btn-start"
+                style={{ width: "auto", padding: "12px 32px" }}
+                onClick={() => {
+                  setStarted(false);
+                  resetGold();
+                }}
+              >
                 ← Back to Setup
               </button>
             </div>
@@ -596,46 +729,93 @@ export default function DeadLastGame() {
         {/* ZOOM OVERLAY */}
         {zoomedCard && (
           <div className="zoom-overlay" onClick={closeZoom}>
-            <div className="zoom-wrapper" onClick={e => e.stopPropagation()}>
-              <button className="zoom-close" onClick={closeZoom}>✕</button>
+            <div className="zoom-wrapper" onClick={(e) => e.stopPropagation()}>
+              <button className="zoom-close" onClick={closeZoom}>
+                ✕
+              </button>
 
-              {zoomedCard.type === "player" && (() => {
-                const p = zoomedCard.data;
-                return (
-                  <div className="zoom-card" style={{
-                    background: `radial-gradient(ellipse at 30% 25%, ${p.color.accent}33, ${p.color.bg} 65%)`,
-                    borderColor: p.color.accent, color: p.color.text,
-                    boxShadow: `0 0 50px ${p.color.accent}55, 0 0 100px ${p.color.accent}1A`,
-                  }}>
-                    <div className="card-watermark" style={{ color: p.color.accent }}>{p.name[0].toUpperCase()}</div>
-                    <div className="zoom-card-name" style={{ color: p.color.accent }}>{p.name}</div>
-                    <div className="zoom-card-sub">{p.color.name} Team</div>
-                    <div className="zoom-tagline" style={{ color: p.color.accent + "AA" }}>Trust No One</div>
-                  </div>
-                );
-              })()}
+              {zoomedCard.type === "player" &&
+                (() => {
+                  const p = zoomedCard.data;
+                  return (
+                    <div
+                      className="zoom-card"
+                      style={{
+                        background: `radial-gradient(ellipse at 30% 25%, ${p.color.accent}33, ${p.color.bg} 65%)`,
+                        borderColor: p.color.accent,
+                        color: p.color.text,
+                        boxShadow: `0 0 50px ${p.color.accent}55, 0 0 100px ${p.color.accent}1A`,
+                      }}
+                    >
+                      <div
+                        className="card-watermark"
+                        style={{ color: p.color.accent }}
+                      >
+                        {p.name[0].toUpperCase()}
+                      </div>
+                      <div
+                        className="zoom-card-name"
+                        style={{ color: p.color.accent }}
+                      >
+                        {p.name}
+                      </div>
+                      <div className="zoom-card-sub">{p.color.name} Team</div>
+                      <div
+                        className="zoom-tagline"
+                        style={{ color: p.color.accent + "AA" }}
+                      >
+                        Trust No One
+                      </div>
+                    </div>
+                  );
+                })()}
 
-              {zoomedCard.type === "action" && (() => {
-                const ac = zoomedCard.data;
-                return (
-                  <div className="zoom-card" style={{
-                    background: ac.bg, borderColor: ac.color, color: ac.color,
-                    boxShadow: `0 0 50px ${ac.glow}55, 0 0 100px ${ac.glow}1A`,
-                  }}>
-                    <div className="action-card-shine"/>
-                    <div className="zoom-card-symbol" style={{ color: ac.color }}>{ac.symbol}</div>
-                    <div className="zoom-card-name"   style={{ color: ac.color }}>{ac.name}</div>
-                    <div className="zoom-card-sub"    style={{ color: ac.color + "99" }}>{ac.desc}</div>
-                    <div className="zoom-tagline"     style={{ color: ac.color + "BB" }}>{ac.tagline}</div>
-                  </div>
-                );
-              })()}
+              {zoomedCard.type === "action" &&
+                (() => {
+                  const ac = zoomedCard.data;
+                  return (
+                    <div
+                      className="zoom-card"
+                      style={{
+                        background: ac.bg,
+                        borderColor: ac.color,
+                        color: ac.color,
+                        boxShadow: `0 0 50px ${ac.glow}55, 0 0 100px ${ac.glow}1A`,
+                      }}
+                    >
+                      <div className="action-card-shine" />
+                      <div
+                        className="zoom-card-symbol"
+                        style={{ color: ac.color }}
+                      >
+                        {ac.symbol}
+                      </div>
+                      <div
+                        className="zoom-card-name"
+                        style={{ color: ac.color }}
+                      >
+                        {ac.name}
+                      </div>
+                      <div
+                        className="zoom-card-sub"
+                        style={{ color: ac.color + "99" }}
+                      >
+                        {ac.desc}
+                      </div>
+                      <div
+                        className="zoom-tagline"
+                        style={{ color: ac.color + "BB" }}
+                      >
+                        {ac.tagline}
+                      </div>
+                    </div>
+                  );
+                })()}
 
               <div className="zoom-hint">Tap outside or ESC to close</div>
             </div>
           </div>
         )}
-
       </div>
     </>
   );
